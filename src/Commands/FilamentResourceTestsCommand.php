@@ -135,17 +135,25 @@ class FilamentResourceTestsCommand extends Command
         $userModel = User::class;
         $modelImport = $resourceModel === $userModel ? "use {$resourceModel};" : "use {$resourceModel};\nuse {$userModel};";
 
+        $individualSearchableColumns = $columns->filter(fn ($column) => $column->isIndividuallySearchable())->keys();
+
+        $modelSingularName = str($resourceModel)->afterLast('\\');
+
         return [
             'resource' => str($resource::class)->afterLast('\\'),
             'modelImport' => $modelImport,
-            'modelSingularName' => str($resourceModel)->afterLast('\\'),
+            'modelSingularName' => $modelSingularName,
             'modelPluralName' => str($resourceModel)->afterLast('\\')->plural(),
             'resourceTableColumns' => $this->convertDoubleQuotedArrayString($columns->keys()),
             'resourceTableColumnsWithoutHidden' => $this->convertDoubleQuotedArrayString($columns->filter(fn ($column) => ! $column->isToggledHiddenByDefault())->keys()),
             'resourceTableToggleableColumns' => $this->convertDoubleQuotedArrayString($columns->filter(fn ($column) => $column->isToggleable())->keys()),
             'resourceTableSortableColumns' => $this->convertDoubleQuotedArrayString($columns->filter(fn ($column) => $column->isSortable())->keys()),
             'resourceTableSearchableColumns' => $this->convertDoubleQuotedArrayString($columns->filter(fn ($column) => $column->isSearchable())->keys()),
-            'resourceTableIndividuallySearchableColumns' => $this->convertDoubleQuotedArrayString($columns->filter(fn ($column) => $column->isIndividuallySearchable())->keys()),
+            'resourceTableIndividuallySearchableColumns' => ! $individualSearchableColumns->isEmpty() ?
+                $this->convertDoubleQuotedArrayString($columns->filter(fn ($column) => $column->isIndividuallySearchable())->keys()) :
+                '\''.$modelSingularName.' does not have individually searchable columns\'',
+            'resourceTableIndividuallySearchableColumnsMethod' => $individualSearchableColumns->isEmpty() ? 'skip' : 'with',
+            'resourceTableIndividuallySearchableColumnsVariable' => ! $individualSearchableColumns->isEmpty() ? 'string $column' : '',
         ];
     }
 
