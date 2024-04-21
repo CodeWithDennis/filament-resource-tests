@@ -13,13 +13,13 @@ class CannotRender extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->getToggledHiddenByDefaultColumns($this->resource)->isNotEmpty();
+        return $this->getToggledHiddenByDefaultColumns()->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_TOGGLED_HIDDEN_BY_DEFAULT_COLUMNS' => $this->convertDoubleQuotedArrayString($this->getToggledHiddenByDefaultColumns($this->resource)->keys()),
+            'RESOURCE_TABLE_TOGGLED_HIDDEN_BY_DEFAULT_COLUMNS' => $this->convertDoubleQuotedArrayString($this->getToggledHiddenByDefaultColumns()->keys()),
         ];
     }
 }

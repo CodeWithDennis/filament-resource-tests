@@ -13,14 +13,14 @@ class Exist extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('index', $this->resource)
-            && $this->hasAnyIndexHeaderAction($this->resource, $this->getIndexHeaderActions($this->resource)['all']->toArray());
+        return $this->hasPage('index')
+            && $this->hasAnyIndexHeaderAction($this->getIndexHeaderActions()['all']->toArray());
     }
 
     public function getVariables(): array
     {
         return [
-            'INDEX_PAGE_HEADER_ACTIONS' => $this->convertDoubleQuotedArrayString($this->getIndexHeaderActions($this->resource)['all']->values()),
+            'INDEX_PAGE_HEADER_ACTIONS' => $this->convertDoubleQuotedArrayString($this->getIndexHeaderActions()['all']->values()),
         ];
     }
 }

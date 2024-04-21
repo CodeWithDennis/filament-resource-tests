@@ -13,6 +13,6 @@ class DeleteSoft extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasTableAction('delete', $this->resource) && $this->hasSoftDeletes($this->resource);
+        return $this->hasTableAction('delete') && $this->hasSoftDeletes();
     }
 }

@@ -11,13 +11,6 @@ class StubHandler
     {
     }
 
-    public function setResource(Resource $resource): static
-    {
-        $this->resource = $resource;
-
-        return $this;
-    }
-
     public function getStubs(): Collection
     {
         $resource = $this->resource;

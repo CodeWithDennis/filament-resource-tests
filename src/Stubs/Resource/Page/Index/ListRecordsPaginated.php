@@ -13,14 +13,14 @@ class ListRecordsPaginated extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('index', $this->resource) && $this->tableHasPagination($this->resource);
+        return $this->hasPage('index') && $this->tableHasPagination();
     }
 
     public function getVariables(): array
     {
         return [
-            'DEFAULT_PER_PAGE_OPTION' => $this->convertDoubleQuotedArrayString($this->getTableDefaultPaginationPageOption($this->resource)),
-            'DEFAULT_PAGINATED_RECORDS_FACTORY_COUNT' => $this->convertDoubleQuotedArrayString($this->getTableDefaultPaginationPageOption($this->resource) * 2),
+            'DEFAULT_PER_PAGE_OPTION' => $this->convertDoubleQuotedArrayString($this->getTableDefaultPaginationPageOption()),
+            'DEFAULT_PAGINATED_RECORDS_FACTORY_COUNT' => $this->convertDoubleQuotedArrayString($this->getTableDefaultPaginationPageOption() * 2),
         ];
     }
 }

@@ -37,7 +37,7 @@ class Base
     {
     }
 
-    public static function make(Resource $resource): self
+    public static function make(?Resource $resource = null): self
     {
         return new static($resource);
     }
@@ -248,131 +248,139 @@ class Base
         return $this->convertDoubleQuotedArrayString('['.implode(',', $result).']');
     }
 
-    public function getResourceRequiredCreateFields(Resource $resource): Collection
+    public function getResourceRequiredCreateFields(?Resource $resource = null): Collection
     {
-        return collect($this->getResourceCreateForm($resource)->getFlatFields())
+        return collect($this->getResourceCreateForm($resource ?? $this->resource)->getFlatFields())
             ->filter(fn ($field) => $field->isRequired());
     }
 
-    public function getResourceRequiredEditFields(Resource $resource): Collection
+    public function getResourceRequiredEditFields(?Resource $resource = null): Collection
     {
-        return collect($this->getResourceEditForm($resource)->getFlatFields())
+        return collect($this->getResourceEditForm($resource ?? $this->resource)->getFlatFields())
             ->filter(fn ($field) => $field->isRequired());
     }
 
-    public function getResourceCreateFields(Resource $resource): array
+    public function getResourceCreateFields(?Resource $resource = null): array
     {
-        return $this->getResourceCreateForm($resource)->getFlatFields(withHidden: true);
+        return $this->getResourceCreateForm($resource ?? $this->resource)->getFlatFields(withHidden: true);
     }
 
-    public function getResourceEditFields(Resource $resource): array
+    public function getResourceEditFields(?Resource $resource = null): array
     {
-        return $this->getResourceEditForm($resource)->getFlatFields(withHidden: true);
+        return $this->getResourceEditForm($resource ?? $this->resource)->getFlatFields(withHidden: true);
     }
 
-    public function getResourceEditForm(Resource $resource): Form
+    public function getResourceEditForm(?Resource $resource = null): Form
     {
+        $resource = $resource ?? $this->resource;
+
         $livewire = app('livewire')->new(EditRecord::class);
 
         return $resource::form(new Form($livewire));
     }
 
-    public function getResourceCreateForm(Resource $resource): Form
+    public function getResourceCreateForm(?Resource $resource = null): Form
     {
+        $resource = $resource ?? $this->resource;
+
         $livewire = app('livewire')->new(CreateRecord::class);
 
         return $resource::form(new Form($livewire));
     }
 
-    public function getResourceTable(Resource $resource): Table
+    public function getResourceTable(?Resource $resource = null): Table
     {
+        $resource = $resource ?? $this->resource;
+
         $livewire = app('livewire')->new(ListRecords::class);
 
         return $resource::table(new Table($livewire));
     }
 
-    public function getResourcePages(Resource $resource): Collection
+    public function getResourcePages(?Resource $resource = null): Collection
     {
+        $resource = $resource ?? $this->resource;
+
         return collect($resource::getPages())->keys();
     }
 
-    public function hasPage(string $name, Resource $resource): bool
+    public function hasPage(string $name, ?Resource $resource = null): bool
     {
-        return $this->getResourcePages($resource)->contains($name);
+        return $this->getResourcePages($resource ?? $this->resource)->contains($name);
     }
 
-    public function tableHasPagination(Resource $resource): bool
+    public function tableHasPagination(?Resource $resource = null): bool
     {
-        return $this->getResourceTable($resource)->isPaginated();
+        return $this->getResourceTable($resource ?? $this->resource)->isPaginated();
     }
 
-    public function tableHasHeading(Resource $resource): bool
+    public function tableHasHeading(?Resource $resource = null): bool
     {
-        return $this->getResourceTable($resource)->getHeading() !== null;
+        return $this->getResourceTable($resource ?? $this->resource)->getHeading() !== null;
     }
 
-    public function getTableHeading(Resource $resource): ?string
+    public function getTableHeading(?Resource $resource = null): ?string
     {
-        return $this->getResourceTable($resource)->getHeading();
+        return $this->getResourceTable($resource ?? $this->resource)->getHeading();
     }
 
-    public function tableHasDescription(Resource $resource): bool
+    public function tableHasDescription(?Resource $resource = null): bool
     {
-        return $this->getResourceTable($resource)->getDescription() !== null;
+        return $this->getResourceTable($resource ?? $this->resource)->getDescription() !== null;
     }
 
-    public function getTableDescription(Resource $resource): ?string
+    public function getTableDescription(?Resource $resource = null): ?string
     {
-        return $this->getResourceTable($resource)->getDescription();
+        return $this->getResourceTable($resource ?? $this->resource)->getDescription();
     }
 
-    public function getTableDefaultPaginationPageOption(Resource $resource): int|string|null
+    public function getTableDefaultPaginationPageOption(?Resource $resource = null): int|string|null
     {
-        return $this->getResourceTable($resource)->getDefaultPaginationPageOption();
+        return $this->getResourceTable($resource ?? $this->resource)->getDefaultPaginationPageOption();
     }
 
-    public function getTableColumns(Resource $resource): Collection
+    public function getTableColumns(?Resource $resource = null): Collection
     {
-        return collect($this->getResourceTable($resource)->getColumns());
+        return collect($this->getResourceTable($resource ?? $this->resource)->getColumns());
     }
 
-    public function getSearchableColumns(Resource $resource): Collection
+    public function getSearchableColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column->isSearchable());
     }
 
-    public function getSortableColumns(Resource $resource): Collection
+    public function getSortableColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column->isSortable());
     }
 
-    public function getIndividuallySearchableColumns(Resource $resource): Collection
+    public function getIndividuallySearchableColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column->isIndividuallySearchable());
     }
 
-    public function getToggleableColumns(Resource $resource): Collection
+    public function getToggleableColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column->isToggleable());
     }
 
-    public function getToggledHiddenByDefaultColumns(Resource $resource): Collection
+    public function getToggledHiddenByDefaultColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column->isToggledHiddenByDefault());
     }
 
-    public function getInitiallyVisibleColumns(Resource $resource): Collection
+    public function getInitiallyVisibleColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => ! $column->isToggledHiddenByDefault());
     }
 
-    public function getDescriptionAboveColumns(Resource $resource): Collection
+    public function getDescriptionAboveColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => method_exists($column, 'description') &&
@@ -380,7 +388,7 @@ class Base
             );
     }
 
-    public function getDescriptionBelowColumns(Resource $resource): Collection
+    public function getDescriptionBelowColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => method_exists($column, 'description') &&
@@ -388,7 +396,7 @@ class Base
             );
     }
 
-    public function getTableColumnDescriptionAbove(Resource $resource): array
+    public function getTableColumnDescriptionAbove(?Resource $resource = null): array
     {
         return $this->getDescriptionAboveColumns($resource)
             ->map(fn ($column) => [
@@ -397,7 +405,7 @@ class Base
             ])->toArray();
     }
 
-    public function getTableColumnDescriptionBelow(Resource $resource): array
+    public function getTableColumnDescriptionBelow(?Resource $resource = null): array
     {
         return $this->getDescriptionBelowColumns($resource)
             ->map(fn ($column) => [
@@ -406,13 +414,13 @@ class Base
             ])->toArray();
     }
 
-    public function getExtraAttributesColumns(Resource $resource): Collection
+    public function getExtraAttributesColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column->getExtraAttributes());
     }
 
-    public function getExtraAttributesColumnValues(Resource $resource): array
+    public function getExtraAttributesColumnValues(?Resource $resource = null): array
     {
         return $this->getExtraAttributesColumns($resource)
             ->map(fn ($column) => [
@@ -421,13 +429,13 @@ class Base
             ])->toArray();
     }
 
-    public function getTableSelectColumns(Resource $resource): Collection
+    public function getTableSelectColumns(?Resource $resource = null): Collection
     {
         return $this->getTableColumns($resource)
             ->filter(fn ($column) => $column instanceof \Filament\Tables\Columns\SelectColumn);
     }
 
-    public function getTableSelectColumnsWithOptions(Resource $resource): array
+    public function getTableSelectColumnsWithOptions(?Resource $resource = null): array
     {
         return $this->getTableSelectColumns($resource)
             ->map(fn ($column) => [
@@ -436,24 +444,26 @@ class Base
             ])->toArray();
     }
 
-    public function getResourceTableColumnsWithSummarizers(Resource $resource): Collection
+    public function getResourceTableColumnsWithSummarizers(?Resource $resource = null): Collection
     {
-        return $this->getTableColumns($resource)->filter(fn ($column) => $column->getSummarizers());
+        return $this->getTableColumns($resource ?? $this->resource)->filter(fn ($column) => $column->getSummarizers());
     }
 
-    public function hasSoftDeletes(Resource $resource): bool
+    public function hasSoftDeletes(?Resource $resource = null): bool
     {
+        $resource = $resource ?? $this->resource;
+
         return method_exists($resource->getModel(), 'bootSoftDeletes');
     }
 
-    public function getResourceTableActions(Resource $resource): Collection
+    public function getResourceTableActions(?Resource $resource = null): Collection
     {
-        return collect($this->getResourceTable($resource)->getFlatActions());
+        return collect($this->getResourceTable($resource ?? $this->resource)->getFlatActions());
     }
 
-    public function getResourceTableBulkActions(Resource $resource): Collection
+    public function getResourceTableBulkActions(?Resource $resource = null): Collection
     {
-        return collect($this->getResourceTable($resource)->getFlatBulkActions());
+        return collect($this->getResourceTable($resource ?? $this->resource)->getFlatBulkActions());
     }
 
     public function getResourceTableFilters(Table $table): Collection
@@ -461,13 +471,15 @@ class Base
         return collect($table->getFilters());
     }
 
-    public function tableHasDeferredLoading(Resource $resource): bool
+    public function tableHasDeferredLoading(?Resource $resource = null): bool
     {
-        return $this->getResourceTable($resource)->isLoadingDeferred();
+        return $this->getResourceTable($resource ?? $this->resource)->isLoadingDeferred();
     }
 
-    public function getIndexHeaderActions(Resource $resource): Collection
+    public function getIndexHeaderActions(?Resource $resource = null): Collection
     {
+        $resource = $resource ?? $this->resource;
+
         $defaults = [
             'all' => collect(),
             'visible' => collect(),
@@ -512,98 +524,98 @@ class Base
         }
     }
 
-    public function getTableActionNames(Resource $resource): Collection
+    public function getTableActionNames(?Resource $resource = null): Collection
     {
-        return $this->getResourceTableActions($resource)->map(fn ($action) => $action->getName());
+        return $this->getResourceTableActions($resource ?? $this->resource)->map(fn ($action) => $action->getName());
     }
 
-    public function getTableActionsWithUrl(Resource $resource): Collection
+    public function getTableActionsWithUrl(?Resource $resource = null): Collection
     {
         return $this->getResourceTableActions($resource)
             ->filter(fn ($action) => $action->getUrl() && ! $action->shouldOpenUrlInNewTab());
     }
 
-    public function getTableActionsWithUrlThatShouldOpenInNewTab(Resource $resource): Collection
+    public function getTableActionsWithUrlThatShouldOpenInNewTab(?Resource $resource = null): Collection
     {
         return $this->getResourceTableActions($resource)
             ->filter(fn ($action) => $action->getUrl() && $action->shouldOpenUrlInNewTab());
     }
 
-    public function hasTableActionWithUrl(Resource $resource): bool
+    public function hasTableActionWithUrl(?Resource $resource = null): bool
     {
-        return $this->getTableActionsWithUrl($resource)->isNotEmpty();
+        return $this->getTableActionsWithUrl($resource ?? $this->resource)->isNotEmpty();
     }
 
-    public function hasTableActionWithUrlThatShouldOpenInNewTab(Resource $resource): bool
+    public function hasTableActionWithUrlThatShouldOpenInNewTab(?Resource $resource = null): bool
     {
-        return $this->getTableActionsWithUrlThatShouldOpenInNewTab($resource)->isNotEmpty();
+        return $this->getTableActionsWithUrlThatShouldOpenInNewTab($resource ?? $this->resource)->isNotEmpty();
     }
 
-    public function getTableActionsWithUrlNames(Resource $resource): Collection
+    public function getTableActionsWithUrlNames(?Resource $resource = null): Collection
     {
         return $this->getTableActionsWithUrl($resource)
             ->map(fn ($action) => $action->getName());
     }
 
-    public function getTableActionsWithUrlThatShouldOpenInNewTabNames(Resource $resource): Collection
+    public function getTableActionsWithUrlThatShouldOpenInNewTabNames(?Resource $resource = null): Collection
     {
-        return $this->getTableActionsWithUrlThatShouldOpenInNewTab($resource)->map(fn ($action) => $action->getName());
+        return $this->getTableActionsWithUrlThatShouldOpenInNewTab($resource ?? $this->resource)->map(fn ($action) => $action->getName());
     }
 
-    public function getTableActionsWithUrlValues(Resource $resource): array
+    public function getTableActionsWithUrlValues(?Resource $resource = null): array
     {
-        return $this->getTableActionsWithUrl($resource)->map(fn ($action) => [
+        return $this->getTableActionsWithUrl($resource ?? $this->resource)->map(fn ($action) => [
             'name' => $action->getName(),
             'url' => $action->getUrl(),
         ])->toArray();
     }
 
-    public function getTableActionsWithUrlThatShouldOpenInNewTabValues(Resource $resource): array
+    public function getTableActionsWithUrlThatShouldOpenInNewTabValues(?Resource $resource = null): array
     {
-        return $this->getTableActionsWithUrlThatShouldOpenInNewTab($resource)->map(fn ($action) => [
+        return $this->getTableActionsWithUrlThatShouldOpenInNewTab($resource ?? $this->resource)->map(fn ($action) => [
             'name' => $action->getName(),
             'url' => $action->getUrl(),
         ])->toArray();
     }
 
-    public function hasTableAction(string $action, Resource $resource): bool
+    public function hasTableAction(string $action, ?Resource $resource = null): bool
     {
-        return $this->getResourceTableActions($resource)->map(fn ($action) => $action->getName())->contains($action);
+        return $this->getResourceTableActions($resource ?? $this->resource)->map(fn ($action) => $action->getName())->contains($action);
     }
 
-    public function hasAnyTableAction(Resource $resource, array $actions): bool
+    public function hasAnyTableAction(array $actions, ?Resource $resource = null): bool
     {
-        return $this->getResourceTableActions($resource)->map(fn ($action) => $action->getName())->intersect($actions)->isNotEmpty();
+        return $this->getResourceTableActions($resource ?? $this->resource)->map(fn ($action) => $action->getName())->intersect($actions)->isNotEmpty();
     }
 
-    public function hasAnyTableBulkAction(Resource $resource, array $actions): bool
+    public function hasAnyTableBulkAction(array $actions, ?Resource $resource = null): bool
     {
-        return $this->getResourceTableBulkActions($resource)->map(fn ($action) => $action->getName())->intersect($actions)->isNotEmpty();
+        return $this->getResourceTableBulkActions($resource ?? $this->resource)->map(fn ($action) => $action->getName())->intersect($actions)->isNotEmpty();
     }
 
-    public function hasAnyIndexHeaderAction(Resource $resource, array $actions): bool
+    public function hasAnyIndexHeaderAction(array $actions, ?Resource $resource = null): bool
     {
         return $this->getIndexHeaderActions($resource)['all']->intersect($actions)->isNotEmpty();
     }
 
-    public function hasAnyHiddenIndexHeaderAction(Resource $resource, array $actions): bool
+    public function hasAnyHiddenIndexHeaderAction(array $actions, ?Resource $resource = null): bool
     {
         return $this->getIndexHeaderActions($resource)['hidden']->intersect($actions)->isNotEmpty();
     }
 
-    public function hasAnyVisibleIndexHeaderAction(Resource $resource, array $actions): bool
+    public function hasAnyVisibleIndexHeaderAction(array $actions, ?Resource $resource = null): bool
     {
         return $this->getIndexHeaderActions($resource)['visible']->intersect($actions)->isNotEmpty();
     }
 
-    public function hasTableBulkAction(string $action, Resource $resource): bool
+    public function hasTableBulkAction(string $action, ?Resource $resource = null): bool
     {
-        return $this->getResourceTableBulkActions($resource)->map(fn ($action) => $action->getName())->contains($action);
+        return $this->getResourceTableBulkActions($resource ?? $this->resource)->map(fn ($action) => $action->getName())->contains($action);
     }
 
-    public function getTableBulkActionNames(Resource $resource): Collection
+    public function getTableBulkActionNames(?Resource $resource = null): Collection
     {
-        return $this->getResourceTableBulkActions($resource)->map(fn ($action) => $action->getName());
+        return $this->getResourceTableBulkActions($resource ?? $this->resource)->map(fn ($action) => $action->getName());
     }
 
     public function hasTableFilter(string $filter, Table $table): bool

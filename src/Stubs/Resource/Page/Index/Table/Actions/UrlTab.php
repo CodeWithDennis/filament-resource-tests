@@ -13,13 +13,13 @@ class UrlTab extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasTableActionWithUrlThatShouldOpenInNewTab($this->resource);
+        return $this->hasTableActionWithUrlThatShouldOpenInNewTab();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_ACTIONS_WITH_URL_THAT_SHOULD_OPEN_IN_NEW_TAB' => $this->transformToPestDataset($this->getTableActionsWithUrlThatShouldOpenInNewTabValues($this->resource), ['name', 'url']),
+            'RESOURCE_TABLE_ACTIONS_WITH_URL_THAT_SHOULD_OPEN_IN_NEW_TAB' => $this->transformToPestDataset($this->getTableActionsWithUrlThatShouldOpenInNewTabValues(), ['name', 'url']),
         ];
     }
 }

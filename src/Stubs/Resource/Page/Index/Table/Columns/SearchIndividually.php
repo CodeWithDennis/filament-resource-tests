@@ -13,13 +13,13 @@ class SearchIndividually extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->getIndividuallySearchableColumns($this->resource)->isNotEmpty();
+        return $this->getIndividuallySearchableColumns()->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_INDIVIDUALLY_SEARCHABLE_COLUMNS' => $this->convertDoubleQuotedArrayString($this->getIndividuallySearchableColumns($this->resource)->keys()),
+            'RESOURCE_TABLE_INDIVIDUALLY_SEARCHABLE_COLUMNS' => $this->convertDoubleQuotedArrayString($this->getIndividuallySearchableColumns()->keys()),
         ];
     }
 }

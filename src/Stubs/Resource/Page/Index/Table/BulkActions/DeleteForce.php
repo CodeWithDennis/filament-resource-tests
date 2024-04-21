@@ -13,8 +13,8 @@ class DeleteForce extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasTableFilter('trashed', $this->getResourceTable($this->resource))
-            && $this->hasSoftDeletes($this->resource)
-            && $this->hasTableBulkAction('forceDelete', $this->resource);
+        return $this->hasTableFilter('trashed', $this->getResourceTable())
+            && $this->hasSoftDeletes()
+            && $this->hasTableBulkAction('forceDelete');
     }
 }

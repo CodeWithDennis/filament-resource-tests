@@ -13,6 +13,6 @@ class ListRecords extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('index', $this->resource);
+        return $this->hasPage('index');
     }
 }

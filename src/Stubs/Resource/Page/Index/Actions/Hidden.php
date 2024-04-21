@@ -13,14 +13,14 @@ class Hidden extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('index', $this->resource)
-            && $this->hasAnyHiddenIndexHeaderAction($this->resource, $this->getIndexHeaderActions($this->resource)['hidden']->toArray());
+        return $this->hasPage('index')
+            && $this->hasAnyHiddenIndexHeaderAction($this->getIndexHeaderActions()['hidden']->toArray());
     }
 
     public function getVariables(): array
     {
         return [
-            'INDEX_PAGE_HIDDEN_HEADER_ACTIONS' => $this->convertDoubleQuotedArrayString($this->getIndexHeaderActions($this->resource)['hidden']->values()),
+            'INDEX_PAGE_HIDDEN_HEADER_ACTIONS' => $this->convertDoubleQuotedArrayString($this->getIndexHeaderActions()['hidden']->values()),
         ];
     }
 }

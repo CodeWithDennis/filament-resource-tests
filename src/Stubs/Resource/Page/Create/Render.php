@@ -13,6 +13,6 @@ class Render extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('create', $this->resource);
+        return $this->hasPage('create');
     }
 }

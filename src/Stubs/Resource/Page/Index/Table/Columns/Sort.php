@@ -13,13 +13,13 @@ class Sort extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->getSortableColumns($this->resource)->isNotEmpty();
+        return $this->getSortableColumns()->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_SORTABLE_COLUMNS' => $this->convertDoubleQuotedArrayString($this->getSortableColumns($this->resource)->keys()),
+            'RESOURCE_TABLE_SORTABLE_COLUMNS' => $this->convertDoubleQuotedArrayString($this->getSortableColumns()->keys()),
         ];
     }
 }

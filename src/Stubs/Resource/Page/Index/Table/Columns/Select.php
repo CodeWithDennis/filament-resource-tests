@@ -13,13 +13,13 @@ class Select extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->getTableSelectColumns($this->resource)->isNotEmpty();
+        return $this->getTableSelectColumns()->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_SELECT_COLUMNS' => $this->transformToPestDataset($this->getTableSelectColumnsWithOptions($this->resource), ['column', 'options']),
+            'RESOURCE_TABLE_SELECT_COLUMNS' => $this->transformToPestDataset($this->getTableSelectColumnsWithOptions(), ['column', 'options']),
         ];
     }
 }

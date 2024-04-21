@@ -13,6 +13,6 @@ class Replicate extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasTableAction('replicate', $this->resource);
+        return $this->hasTableAction('replicate');
     }
 }

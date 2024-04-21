@@ -13,13 +13,13 @@ class DescriptionAbove extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->getDescriptionAboveColumns($this->resource)->isNotEmpty();
+        return $this->getDescriptionAboveColumns()->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_DESCRIPTIONS_ABOVE_COLUMNS' => $this->transformToPestDataset($this->getTableColumnDescriptionAbove($this->resource), ['column', 'description']),
+            'RESOURCE_TABLE_DESCRIPTIONS_ABOVE_COLUMNS' => $this->transformToPestDataset($this->getTableColumnDescriptionAbove(), ['column', 'description']),
         ];
     }
 }

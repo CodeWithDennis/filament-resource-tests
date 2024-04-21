@@ -13,13 +13,13 @@ class Url extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasTableActionWithUrl($this->resource);
+        return $this->hasTableActionWithUrl();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_ACTIONS_WITH_URL' => $this->transformToPestDataset($this->getTableActionsWithUrlValues($this->resource), ['name', 'url']),
+            'RESOURCE_TABLE_ACTIONS_WITH_URL' => $this->transformToPestDataset($this->getTableActionsWithUrlValues(), ['name', 'url']),
         ];
     }
 }

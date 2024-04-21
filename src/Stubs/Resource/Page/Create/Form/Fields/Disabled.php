@@ -13,14 +13,14 @@ class Disabled extends Base
 
     public function getShouldGenerate(): bool
     {
-        return collect($this->getResourceCreateFields($this->resource))
+        return collect($this->getResourceCreateFields())
             ->filter(fn ($field) => $field->isDisabled())->count();
     }
 
     public function getVariables(): array
     {
         return [
-            'CREATE_PAGE_DISABLED_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields($this->resource))->filter(fn ($field) => $field->isDisabled())->keys()),
+            'CREATE_PAGE_DISABLED_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields())->filter(fn ($field) => $field->isDisabled())->keys()),
         ];
     }
 }

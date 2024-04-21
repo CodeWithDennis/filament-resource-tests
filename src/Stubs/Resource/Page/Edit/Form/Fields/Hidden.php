@@ -13,14 +13,14 @@ class Hidden extends Base
 
     public function getShouldGenerate(): bool
     {
-        return collect($this->getResourceEditFields($this->resource))
+        return collect($this->getResourceEditFields())
             ->filter(fn ($field) => $field->isHidden())->count();
     }
 
     public function getVariables(): array
     {
         return [
-            'EDIT_PAGE_HIDDEN_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceEditFields($this->resource))->filter(fn ($field) => $field->isHidden())->keys()),
+            'EDIT_PAGE_HIDDEN_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceEditFields())->filter(fn ($field) => $field->isHidden())->keys()),
         ];
     }
 }

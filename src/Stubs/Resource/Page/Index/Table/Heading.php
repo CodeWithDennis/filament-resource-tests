@@ -13,14 +13,14 @@ class Heading extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('index', $this->resource)
-            && $this->tableHasHeading($this->resource);
+        return $this->hasPage('index')
+            && $this->tableHasHeading();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_HEADING' => $this->convertDoubleQuotedArrayString(str($this->getTableHeading($this->resource))->wrap('\'')),
+            'RESOURCE_TABLE_HEADING' => $this->convertDoubleQuotedArrayString(str($this->getTableHeading())->wrap('\'')),
         ];
     }
 }

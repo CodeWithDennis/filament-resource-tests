@@ -13,13 +13,13 @@ class Exists extends Base
 
     public function getShouldGenerate(): bool
     {
-        return collect($this->getResourceEditFields($this->resource))->count();
+        return collect($this->getResourceEditFields())->count();
     }
 
     public function getVariables(): array
     {
         return [
-            'EDIT_PAGE_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceEditFields($this->resource))->keys()),
+            'EDIT_PAGE_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceEditFields())->keys()),
         ];
     }
 }

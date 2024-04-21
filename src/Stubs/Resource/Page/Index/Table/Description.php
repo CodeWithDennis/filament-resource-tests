@@ -13,14 +13,14 @@ class Description extends Base
 
     public function getShouldGenerate(): bool
     {
-        return $this->hasPage('index', $this->resource)
-            && $this->tableHasDescription($this->resource);
+        return $this->hasPage('index')
+            && $this->tableHasDescription();
     }
 
     public function getVariables(): array
     {
         return [
-            'RESOURCE_TABLE_DESCRIPTION' => $this->convertDoubleQuotedArrayString(str($this->getTableDescription($this->resource))->wrap('\'')),
+            'RESOURCE_TABLE_DESCRIPTION' => $this->convertDoubleQuotedArrayString(str($this->getTableDescription())->wrap('\'')),
         ];
     }
 }
