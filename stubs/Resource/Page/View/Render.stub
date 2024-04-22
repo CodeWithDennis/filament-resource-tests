@@ -1,5 +1,5 @@
 it({{ DESCRIPTION }}, function () {
-    $record = {{ MODEL_SINGULAR_NAME }}::factory()->create();
+    $record = {{ MODEL_SINGULAR_NAME }}::factory(){{ FACTORY_FOR_TENANT_METHOD_IF_HAS_TENANCY }}->create();
 
     livewire({{ RESOURCE_VIEW_CLASS }}, ['record' => $record->getRouteKey()])
         ->assertSuccessful();

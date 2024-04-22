@@ -151,7 +151,17 @@ class Base
             'RESOURCE_VIEW_CLASS' => $this->hasPage('view', $resource) ? 'View'.str($resourceModel)->afterLast('\\')->append('::class') : '',
             'LOAD_TABLE_METHOD_IF_DEFERRED' => $this->tableHasDeferredLoading($resource) ? $this->getDeferredLoadingMethod() : '',
             'RESOLVED_GROUP_METHOD' => $this->getGroupMethod(),
+            'FACTORY_FOR_TENANT_METHOD_IF_HAS_TENANCY' => $this->hasTenancy() ? $this->getFactoryForTenantMethod() : '',
         ];
+
+        if ($this->hasTenancy()) {
+            $toBeConverted['TENANT_MODEL'] = $this->convertDoubleQuotedArrayString($this->getTenantModel());
+            $toBeConverted['TENANT_MODEL_CLASS'] = $this->convertDoubleQuotedArrayString($this->getTenantModelClass());
+            $toBeConverted['TENANT_MODEL_PLURAL_NAME'] = str($this->getTenantModel())->afterLast('\\')->plural();
+            $toBeConverted['TENANT_MODEL_PLURAL_NAME_LOWER'] = str($this->getTenantModel())->afterLast('\\')->plural()->lower();
+            $toBeConverted['TENANT_MODEL_SINGULAR_NAME'] = str($this->getTenantModel())->afterLast('\\');
+            $toBeConverted['TENANT_MODEL_SINGULAR_NAME_LOWER'] = str($this->getTenantModel())->afterLast('\\')->lower();
+        }
 
         return array_map(function ($value) {
             return $this->convertDoubleQuotedArrayString($value);
@@ -218,7 +228,9 @@ class Base
     {
         return str($string)
             ->replace('"', '\'')
-            ->replace(',', ', ');
+            // removes additional white spaces that may have occurred during recursive conversions (transformToPestDataset)
+            // TODO: potentially find a better way to handle this...what if the description has multiple spaces on purpose?
+            ->replaceMatches('/\s*,\s*/', ', ');
     }
 
     protected function transformToPestDataset(array $source, array $keys): string
@@ -611,6 +623,21 @@ class Base
         return $this->getResourceTableFilters($table)->map(fn ($filter) => $filter->getName())->contains($filter);
     }
 
+    public function hasTenancy(): bool
+    {
+        return Filament::getDefaultPanel()->hasTenancy();
+    }
+
+    public function getTenantModel(): ?string
+    {
+        return Filament::getTenantModel();
+    }
+
+    public function getTenantModelClass(): ?string
+    {
+        return $this->getTenantModel() ? str($this->getTenantModel())->finish('::class') : null;
+    }
+
     public function getRegistrationRouteAction(): ?string
     {
         return Filament::getDefaultPanel()?->getRegistrationRouteAction();
@@ -656,6 +683,11 @@ class Base
         return "->group({$this->toGroupMethod()})";
     }
 
+    public function getFactoryForTenantMethod(): string
+    {
+        return '->for($this->{{ TENANT_MODEL_SINGULAR_NAME_LOWER }})';
+    }
+
     public function toGroupMethod(): ?string
     {
         $group = $this->getGroup();
@@ -664,6 +696,8 @@ class Base
             ->filter(fn ($part) => ! empty($part))
             ->map(fn ($part) => "'".trim(str($part)->kebab())."'");
 
-        return $this->convertDoubleQuotedArrayString($parts->implode(','));
+        $sortedParts = $parts->sort()->values();
+
+        return $this->convertDoubleQuotedArrayString($sortedParts->implode(','));
     }
 }

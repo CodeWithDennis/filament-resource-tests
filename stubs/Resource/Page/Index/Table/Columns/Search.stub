@@ -1,5 +1,5 @@
 it({{ DESCRIPTION }}, function (string $column) {
-    $records = {{ MODEL_SINGULAR_NAME }}::factory(3)->create();
+    $records = {{ MODEL_SINGULAR_NAME }}::factory(3){{ FACTORY_FOR_TENANT_METHOD_IF_HAS_TENANCY }}->create();
 
     $search = $records->first()->{$column};
 

@@ -4,19 +4,15 @@ namespace CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index;
 
 use CodeWithDennis\FilamentTests\Stubs\Base;
 
-class ListRecords extends Base
+class TenancyListRecords extends Base
 {
     public function getDescription(): string
     {
-        return 'can list records on the index page';
+        return 'can list records on the index page (tenancy)';
     }
 
     public function getShouldGenerate(): bool
     {
-        if ($this->hasTenancy()) {
-            return false;
-        }
-
-        return $this->hasPage('index', $this->resource);
+        return $this->hasPage('index', $this->resource) && $this->hasTenancy();
     }
 }

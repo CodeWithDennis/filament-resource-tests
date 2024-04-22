@@ -1,0 +1,11 @@
+it({{ DESCRIPTION }}, function () {
+    $records = {{ MODEL_SINGULAR_NAME }}::factory({{ DEFAULT_PAGINATED_RECORDS_FACTORY_COUNT }})->for($this->{{ TENANT_MODEL_SINGULAR_NAME_LOWER }})->create();
+    $recordsOfOtherTenant = {{ MODEL_SINGULAR_NAME }}::factory({{ DEFAULT_PAGINATED_RECORDS_FACTORY_COUNT }})->for($this->otherTenant)->create();
+
+
+    livewire({{ RESOURCE_LIST_CLASS }}){{ LOAD_TABLE_METHOD_IF_DEFERRED }}
+        ->call('gotoPage', 2)
+        ->assertCanSeeTableRecords($records->skip({{ DEFAULT_PER_PAGE_OPTION }}))
+        ->assertCanNotSeeTableRecords($recordsOfOtherTenant->take({{ DEFAULT_PER_PAGE_OPTION }}))
+        ->assertCountTableRecords({{ DEFAULT_PAGINATED_RECORDS_FACTORY_COUNT }});
+}){{ RESOLVED_GROUP_METHOD }};

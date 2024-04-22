@@ -24,6 +24,7 @@ class StubHandler
 
         $stubs = [
             \CodeWithDennis\FilamentTests\Stubs\SetupStub::make($resource)->get(),
+            \CodeWithDennis\FilamentTests\Stubs\TenancySetupStub::make($resource)->get(),
 
             \CodeWithDennis\FilamentTests\Stubs\Pages\Auth\Registration\Render::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Pages\Auth\PasswordReset\Render::make($resource)->get(),
@@ -31,7 +32,9 @@ class StubHandler
 
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Render::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\ListRecords::make($resource)->get(),
+            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\TenancyListRecords::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\ListRecordsPaginated::make($resource)->get(),
+            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\TenancyListRecordsPaginated::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Trashed::make($resource)->get(),
 
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Actions\Exist::make($resource)->get(),

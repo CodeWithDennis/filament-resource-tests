@@ -4,16 +4,16 @@ namespace CodeWithDennis\FilamentTests\Stubs;
 
 use Closure;
 
-class SetupStub extends Base
+class TenancySetupStub extends Base
 {
-    public Closure|string|null $name = 'Setup';
+    public Closure|string|null $name = 'TenancySetup';
 
     public function getShouldGenerate(): bool
     {
         if ($this->hasTenancy()) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

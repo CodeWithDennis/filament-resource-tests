@@ -1,0 +1,9 @@
+it({{ DESCRIPTION }}, function () {
+    $records = {{ MODEL_SINGULAR_NAME }}::factory(3)->for($this->{{ TENANT_MODEL_SINGULAR_NAME_LOWER }})->create();
+    $recordsOfOtherTenant = {{ MODEL_SINGULAR_NAME }}::factory(3)->for($this->otherTenant)->create();
+
+    livewire({{ RESOURCE_LIST_CLASS }}){{ LOAD_TABLE_METHOD_IF_DEFERRED }}
+        ->assertCanSeeTableRecords($records)
+        ->assertCanNotSeeTableRecords($recordsOfOtherTenant)
+        ->assertCountTableRecords(3);
+}){{ RESOLVED_GROUP_METHOD }};
