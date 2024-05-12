@@ -294,7 +294,8 @@ class Base
 
     public function getResourceRelations(Resource $resource): Collection
     {
-        return collect($resource::getRelations());
+        return collect($resource::getRelations())
+            ->map(fn ($relation) => ! is_string($relation) ? $relation->relationManager : $relation);
     }
 
     public function getResourceRelationManagerByName(string $name, Resource $resource): ?string
@@ -657,7 +658,6 @@ class Base
                     ->filter(fn ($action) => ! $action->isVisible())
                     ->map(fn ($action) => $action->getName()),
             ]);
-
         } catch (\Throwable) {
             return collect($defaults);
         }
