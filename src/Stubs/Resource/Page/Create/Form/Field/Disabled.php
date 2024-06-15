@@ -21,7 +21,7 @@ class Disabled extends Base
     public function getVariables(): array
     {
         return [
-            'CREATE_PAGE_DISABLED_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields($this->resource))->filter(fn ($field) => $field->isDisabled())->keys()),
+            'CREATE_PAGE_DISABLED_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFormFields($this->resource))->filter(fn ($field) => $field->isDisabled())->keys()),
         ];
     }
 }

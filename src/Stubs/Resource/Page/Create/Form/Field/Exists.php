@@ -21,7 +21,7 @@ class Exists extends Base
     public function getVariables(): array
     {
         return [
-            'CREATE_PAGE_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields($this->resource))->keys()),
+            'CREATE_PAGE_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFormFields($this->resource))->keys()),
         ];
     }
 }

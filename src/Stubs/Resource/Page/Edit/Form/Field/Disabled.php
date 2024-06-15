@@ -21,7 +21,7 @@ class Disabled extends Base
     public function getVariables(): array
     {
         return [
-            'EDIT_PAGE_DISABLED_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceEditFields($this->resource))->filter(fn ($field) => $field->isDisabled())->keys()),
+            'EDIT_PAGE_DISABLED_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceEditFormFields($this->resource))->filter(fn ($field) => $field->isDisabled())->keys()),
         ];
     }
 }

@@ -21,7 +21,7 @@ class Hidden extends Base
     public function getVariables(): array
     {
         return [
-            'CREATE_PAGE_HIDDEN_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields($this->resource))->filter(fn ($field) => $field->isHidden())->keys()),
+            'CREATE_PAGE_HIDDEN_FIELDS' => $this->convertDoubleQuotedArrayString($this->getResourceCreateFormHiddenFields($this->resource)->keys()),
         ];
     }
 }

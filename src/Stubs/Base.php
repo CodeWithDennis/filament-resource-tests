@@ -270,26 +270,48 @@ class Base
         return $this->convertDoubleQuotedArrayString('['.implode(',', $result).']');
     }
 
-    public function getResourceRequiredCreateFields(Resource $resource): Collection
+    public function getResourceCreateFormRequiredFields(Resource $resource): Collection
     {
         return collect($this->getResourceCreateForm($resource)->getFlatFields())
             ->filter(fn ($field) => $field->isRequired());
     }
 
-    public function getResourceRequiredEditFields(Resource $resource): Collection
+    public function getResourceEditFormRequiredFields(Resource $resource): Collection
     {
         return collect($this->getResourceEditForm($resource)->getFlatFields())
             ->filter(fn ($field) => $field->isRequired());
     }
 
-    public function getResourceCreateFields(Resource $resource): array
+    public function getResourceCreateFormFields(Resource $resource): Collection
     {
-        return $this->getResourceCreateForm($resource)->getFlatFields(withHidden: true);
+        return collect($this->getResourceCreateForm($resource)->getFlatFields(withHidden: true));
     }
 
-    public function getResourceEditFields(Resource $resource): array
+    public function getResourceCreateFormVisibleFields(Resource $resource): Collection
     {
-        return $this->getResourceEditForm($resource)->getFlatFields(withHidden: true);
+        return collect($this->getResourceCreateForm($resource)->getFlatFields());
+    }
+
+    public function getResourceCreateFormHiddenFields(Resource $resource): Collection
+    {
+        return $this->getResourceCreateFormFields($resource)
+            ->diffKeys($this->getResourceCreateFormVisibleFields($resource));
+    }
+
+    public function getResourceEditFormFields(Resource $resource): Collection
+    {
+        return collect($this->getResourceEditForm($resource)->getFlatFields(withHidden: true));
+    }
+
+    public function getResourceEditFormVisibleFields(Resource $resource): Collection
+    {
+        return collect($this->getResourceEditForm($resource)->getFlatFields());
+    }
+
+    public function getResourceEditFormHiddenFields(Resource $resource): Collection
+    {
+        return $this->getResourceEditFormFields($resource)
+            ->diffKeys($this->getResourceEditFormVisibleFields($resource));
     }
 
     public function getResourceEditForm(Resource $resource): Form
