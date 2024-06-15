@@ -684,6 +684,57 @@ class Base
         }
     }
 
+    public function getIndexTabs(Resource $resource): Collection
+    {
+        $indexPage = $resource::getPages()['index'] ?? null;
+
+        if (! $indexPage) {
+            return collect();
+        }
+
+        try {
+            $reflection = new \ReflectionClass($indexPage);
+
+            $pageProperty = $reflection->getProperty('page');
+
+            $page = $pageProperty->getValue($indexPage);
+
+            $page = app()->make($page);
+
+            $reflection = new \ReflectionClass($page);
+
+            $getTabsMethod = $reflection->getMethod('getTabs');
+
+            $tabs = $getTabsMethod->invoke($page);
+
+            return collect($tabs)->mapWithKeys(function ($tab, $key) {
+                return [$key => [
+                    'name' => $key,
+                    'label' => $tab->getLabel(),
+                ]];
+            });
+
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    public function getIndexTabsAsCommaSeparatedString(Resource $resource): string
+    {
+        if ($this->getIndexTabs($resource)->isEmpty()) {
+            return '';
+        }
+
+        $flatArray = $this->getIndexTabs($resource)->flatMap(function ($tab, $key) {
+            return [
+                $tab['name'],
+                $tab['label'],
+            ];
+        })->all();
+
+        return "['".implode("', '", $flatArray)."']";
+    }
+
     public function getTableActionNames(Resource $resource): Collection
     {
         return $this->getResourceTableActions($resource)->map(fn ($action) => $action->getName());

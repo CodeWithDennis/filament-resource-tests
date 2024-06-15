@@ -173,7 +173,6 @@ You can customize the stubs by publishing them to your project:
 ```bash
 php artisan vendor:publish --tag="filament-tests-stubs"
 ```
-
 ## Running the package tests
 > 💡 Please make sure to uncomment `Illuminate\Foundation\Testing\RefreshDatabase::class` in `tests/Pest.php` before running the tests.
 > 

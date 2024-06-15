@@ -39,6 +39,7 @@ class StubHandler
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\ListRecords::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\ListRecordsPaginated::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Trashed::make($resource)->get(),
+            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Tabs::make($resource)->get(),
 
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Action\Exist::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Action\Hidden::make($resource)->get(),

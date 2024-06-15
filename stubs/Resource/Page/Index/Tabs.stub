@@ -1,0 +1,4 @@
+it({{ DESCRIPTION }}, function () {
+     livewire({{ RESOURCE_LIST_CLASS }})
+        ->assertSeeInOrder({{ INDEX_TABS_AS_STRING_LIST }});
+}){{ RESOLVED_GROUP_METHOD }};
