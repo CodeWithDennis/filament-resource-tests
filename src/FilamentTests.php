@@ -2,6 +2,4 @@
 
 namespace CodeWithDennis\FilamentTests;
 
-class FilamentTests
-{
-}
+class FilamentTests {}

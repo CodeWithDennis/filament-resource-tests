@@ -1,7 +1,5 @@
 <?php
 
-uses()->group('filament-tests');
-
 {{ MODEL_IMPORT }}
 
 use Filament\Tables\Actions\{
@@ -13,6 +11,8 @@ use Filament\Tables\Actions\{
     ForceDeleteAction,
     ForceDeleteBulkAction
 };
+
+uses()->group('filament-tests');
 
 use function Pest\Laravel\{actingAs};
 use function Pest\Livewire\livewire;

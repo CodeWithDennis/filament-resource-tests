@@ -34,9 +34,7 @@ class Base
 
     public Closure|bool $shouldGenerateWithTodos = true;
 
-    public function __construct(public Resource $resource, public ?string $relationManager = null)
-    {
-    }
+    public function __construct(public Resource $resource, public ?string $relationManager = null) {}
 
     public static function make(Resource $resource, ?string $relationManager = null): static
     {
