@@ -7,9 +7,7 @@ use Illuminate\Support\Collection;
 
 class StubHandler
 {
-    public function __construct(public Resource $resource)
-    {
-    }
+    public function __construct(public Resource $resource) {}
 
     public function setResource(Resource $resource): static
     {
@@ -80,9 +78,10 @@ class StubHandler
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Summary\DateRange::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Summary\Sum::make($resource)->get(),
 
-            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Filter\Reset::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Filter\Add::make($resource)->get(),
+            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Filter\Exist::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Filter\Remove::make($resource)->get(),
+            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Table\Filter\Reset::make($resource)->get(),
 
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Widget\RenderFooterWidgets::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Index\Widget\RenderHeaderWidgets::make($resource)->get(),
@@ -237,8 +236,9 @@ class StubHandler
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Column\Sort::make($resource, $relation)->get(),
 
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Filter\Add::make($resource, $relation)->get(),
-                \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Filter\Remove::make($resource, $relation)->get(),
+                \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Filter\Exist::make($resource, $relation)->get(),
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Filter\Reset::make($resource, $relation)->get(),
+                \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Filter\Remove::make($resource, $relation)->get(),
 
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Summary\Average::make($resource, $relation)->get(),
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\RelationManager\Table\Summary\Count::make($resource, $relation)->get(),
@@ -288,8 +288,9 @@ class StubHandler
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Column\Sort::make($resource, $relation)->get(),
 
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Filter\Add::make($resource, $relation)->get(),
-                \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Filter\Remove::make($resource, $relation)->get(),
+                \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Filter\Exist::make($resource, $relation)->get(),
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Filter\Reset::make($resource, $relation)->get(),
+                \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Filter\Remove::make($resource, $relation)->get(),
 
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Summary\Average::make($resource, $relation)->get(),
                 \CodeWithDennis\FilamentTests\Stubs\Resource\Page\View\RelationManager\Table\Summary\Count::make($resource, $relation)->get(),

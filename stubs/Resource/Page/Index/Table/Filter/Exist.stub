@@ -1,0 +1,4 @@
+it({{ DESCRIPTION }}, function (string $column) {
+    livewire({{ RESOURCE_LIST_CLASS }})
+        ->assertTableFilterExists($column);
+})->with({{ RESOURCE_TABLE_FILTERS }}){{ RESOLVED_GROUP_METHOD }};

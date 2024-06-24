@@ -110,9 +110,10 @@ return [
                             ],
 
                             'filter' => [
+                                'add' => true,
                                 'exist' => true,
-                                'hidden' => true,
-                                'visible' => true,
+                                'remove' => true,
+                                'reset' => true,
                             ],
 
                             'summary' => [
@@ -183,6 +184,7 @@ return [
 
                         'filter' => [
                             'add' => true,
+                            'exist' => true,
                             'remove' => true,
                             'reset' => true,
                         ],
@@ -278,6 +280,7 @@ return [
 
                             'filter' => [
                                 'add' => true,
+                                'exist' => true,
                                 'remove' => true,
                                 'reset' => true,
                             ],

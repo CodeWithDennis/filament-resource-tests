@@ -1,0 +1,11 @@
+it({{ DESCRIPTION }}, function (string $column) {
+    $ownerRecord = {{ MODEL_SINGULAR_NAME }}::factory()
+            ->has{{ RELATION_MANAGER_RELATIONSHIP_NAME }}(3)
+            ->create();
+
+        livewire({{ RELATION_MANAGER_CLASS }}, [
+            'ownerRecord' => $ownerRecord,
+            'pageClass' => {{ RESOURCE_EDIT_CLASS }}
+            ])
+            ->assertTableFilterExists($column);
+})->with({{ RELATION_MANAGER_TABLE_FILTERS }}){{ RESOLVED_GROUP_METHOD }};
