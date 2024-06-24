@@ -1,5 +1,5 @@
 it({{ DESCRIPTION }}, function (string $column) {
-    $records = {{ MODEL_SINGULAR_NAME }}::factory(3)->create();
+    $records = {{ MODEL_SINGULAR_NAME }}::factory({{ MODEL_FACTORY_COUNT }})->create();
 
     $search = data_get($records->first(), $column);
 

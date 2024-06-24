@@ -34,9 +34,7 @@ class Base
 
     public Closure|bool $shouldGenerateWithTodos = true;
 
-    public function __construct(public Resource $resource, public ?string $relationManager = null)
-    {
-    }
+    public function __construct(public Resource $resource, public ?string $relationManager = null) {}
 
     public static function make(Resource $resource, ?string $relationManager = null): static
     {
@@ -156,6 +154,8 @@ class Base
             'MODEL_IMPORT' => $modelImport,
             'MODEL_PLURAL_NAME' => $resourceModelName->plural(),
             'MODEL_SINGULAR_NAME' => $resourceModelName,
+            'MODEL_FACTORY_COUNT' => config('filament-tests.generate.model_factory_count', 3),
+            'MODEL_RELATIONSHIP_FACTORY_COUNT' => config('filament-tests.generate.model_relationship_factory_count', 3),
 
             'RESOURCE_LIST_CLASS' => $this->getResourceClass($resource, 'index'),
             'RESOURCE_CREATE_CLASS' => $this->getResourceClass($resource, 'create'),

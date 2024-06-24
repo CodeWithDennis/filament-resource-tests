@@ -15,6 +15,17 @@ return [
      * Customize the tests to be generated.
      */
     'generate' => [
+
+        /**
+         * The number of model factories to generate.
+         */
+        'model_factory_count' => 3,
+
+        /**
+         * The number of model factories to generate for relationships.
+         */
+        'model_relationship_factory_count' => 3,
+
         'resource' => [
             'page' => [
                 'create' => [

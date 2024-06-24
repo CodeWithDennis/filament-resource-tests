@@ -1,6 +1,6 @@
 it({{ DESCRIPTION }}, function (string $column) {
     $ownerRecord = {{ MODEL_SINGULAR_NAME }}::factory()
-        ->has{{ RELATION_MANAGER_RELATIONSHIP_NAME_UCFIRST }}(3)
+        ->has{{ RELATION_MANAGER_RELATIONSHIP_NAME_UCFIRST }}({{ MODEL_RELATIONSHIP_FACTORY_COUNT }})
         ->create();
 
     $search = data_get($ownerRecord->{{ RELATION_MANAGER_RELATIONSHIP_NAME_LCFIRST }}->first(), $column);
