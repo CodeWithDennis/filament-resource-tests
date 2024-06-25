@@ -7,9 +7,7 @@ use Illuminate\Support\Collection;
 
 class StubHandler
 {
-    public function __construct(public Resource $resource)
-    {
-    }
+    public function __construct(public Resource $resource) {}
 
     public function setResource(Resource $resource): static
     {

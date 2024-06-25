@@ -309,4 +309,9 @@ return [
             ],
         ],
     ],
+
+    /**
+     * Run laravel/pint for the generated tests after they are generated.
+     */
+    'run_pint_after_generation' => env('FILAMENT_TESTS_RUN_PINT_AFTER_GENERATION', true),
 ];

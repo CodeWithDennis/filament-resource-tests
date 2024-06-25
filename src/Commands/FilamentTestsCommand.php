@@ -8,6 +8,8 @@ use Filament\Resources\Resource;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\multiselect;
@@ -109,6 +111,8 @@ class FilamentTestsCommand extends Command
         ]);
 
         $this->tableOutput($resources);
+
+        $this->runPint($this->selectedResources);
 
         return self::SUCCESS;
     }
@@ -312,5 +316,51 @@ class FilamentTestsCommand extends Command
         }
 
         $this->components->twoColumnDetail('Duration', $totalDuration);
+
+    }
+
+    protected function runPint(Collection $resources): void
+    {
+        $this->warnPintNotInstalled();
+
+        if (! $this->isPintInstalled()) {
+            return;
+        }
+
+        if (config('filament-tests.run_pint') === false) {
+            return;
+        }
+
+        $this->newLine();
+
+        $this->info('Running Laravel Pint for the generated tests...');
+
+        $testFolder = config('filament-tests.directory_name');
+        $tests = $resources->map(fn ($resource) => $testFolder.DIRECTORY_SEPARATOR.$resource['name'].'Test.php')->toArray();
+
+        $process = new Process(['vendor/bin/pint', ...$tests], base_path());
+
+        $process->setTimeout(null);
+
+        try {
+            $process->mustRun();
+
+        } catch (ProcessFailedException $exception) {
+            $this->error($exception->getMessage());
+        }
+
+        $this->info('Laravel Pint has been run for the generated tests.');
+    }
+
+    protected function isPintInstalled(): bool
+    {
+        return \Composer\InstalledVersions::isInstalled('laravel/pint');
+    }
+
+    protected function warnPintNotInstalled(): void
+    {
+        if (! $this->isPintInstalled()) {
+            $this->info('Laravel Pint is not installed. Please install it to run the tests or disable the option in the configuration file.');
+        }
     }
 }
