@@ -37,6 +37,12 @@ return [
                         'validate' => true,
                     ],
 
+                    'simple' => [
+                        'form' => [
+                            'create' => true,
+                        ],
+                    ],
+
                     'widget' => [
                         'render_footer_widgets' => true,
                         'render_header_widgets' => true,

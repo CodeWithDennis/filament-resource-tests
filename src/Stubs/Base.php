@@ -12,7 +12,10 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
+use ReflectionClass;
+use ReflectionMethod;
 
 class Base
 {
@@ -34,9 +37,7 @@ class Base
 
     public Closure|bool $shouldGenerateWithTodos = true;
 
-    public function __construct(public Resource $resource, public ?string $relationManager = null)
-    {
-    }
+    public function __construct(public Resource $resource, public ?string $relationManager = null) {}
 
     public static function make(Resource $resource, ?string $relationManager = null): static
     {
@@ -164,6 +165,8 @@ class Base
 
             'LOAD_TABLE_METHOD_IF_DEFERRED' => $this->tableHasDeferredLoading($resource) ? $this->getDeferredLoadingMethod() : '',
             'RESOLVED_GROUP_METHOD' => $this->getGroupMethod(),
+
+            'CURRENTLY_ONLY_SUPPORTING_BASIC_FIELDS_AND_BELONGSTO_RELATIONSHIPS' => "// filament-tests currently only supports basic fields and belongsTo relationships. \n// If you have more complex relationships (BelongsToMany and alike), you will need to manually adjust the tests.",
         ];
 
         return array_map([$this, 'convertDoubleQuotedArrayString'], $toBeConverted);
@@ -270,10 +273,66 @@ class Base
         return $this->convertDoubleQuotedArrayString('['.implode(',', $result).']');
     }
 
-    public function getResourceRequiredCreateFields(Resource $resource): Collection
+    public function getResourceCreateFormRequiredFields(Resource $resource): Collection
     {
         return collect($this->getResourceCreateForm($resource)->getFlatFields())
             ->filter(fn ($field) => $field->isRequired());
+    }
+
+    public function getResourceCreateFormRequiredFieldWithRelationships(Resource $resource): Collection
+    {
+        return collect($this->getResourceCreateForm($resource)->getFlatFields())
+            ->filter(fn ($field) => $field->isRequired() && method_exists($field, 'getRelationship'));
+    }
+
+    // example: getRelationNameFromAttribute('App\Models\Blog\Post', 'blog_author_id') => 'author'
+    public function getRelationNameFromAttribute($modelClass, $attribute)
+    {
+        $attributeBase = rtrim($attribute, '_id');
+        $attributeCamelCase = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $attributeBase))));
+
+        $possibleRelationNames = [];
+        for ($i = 0; $i < strlen($attributeCamelCase); $i++) {
+            $possibleRelationNames[] = lcfirst(substr($attributeCamelCase, $i));
+        }
+
+        $model = new $modelClass;
+        $modelReflection = new ReflectionClass($model);
+        $methods = $modelReflection->getMethods(ReflectionMethod::IS_PUBLIC); // TODO: do people create relationships as protected? 🤔
+
+        foreach ($methods as $method) {
+            if (preg_match('/^(get|set|__)/', $method->name)) {
+                continue;
+            }
+
+            $methodReflection = new ReflectionMethod($model, $method->name);
+
+            if ($methodReflection->getNumberOfParameters() === 0) {
+                $returnType = $methodReflection->getReturnType();
+                if ($returnType && is_subclass_of((string) $returnType, Relation::class)) {
+                    $relation = $model->{$method->name}();
+                    foreach ($possibleRelationNames as $relationName) {
+                        if ($method->name === $relationName && $relation->getForeignKeyName() === $attribute) {
+                            return $method->name;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getResourceCreateFormRequiredFieldWithoutRelationships(Resource $resource): Collection
+    {
+        return collect($this->getResourceCreateForm($resource)->getFlatFields())
+            ->filter(fn ($field) => $field->isRequired() && ! method_exists($field, 'getRelationship'));
+    }
+
+    public function getResourceCreateFormOptionalFields(Resource $resource): Collection
+    {
+        return collect($this->getResourceCreateForm($resource)->getFlatFields())
+            ->filter(fn ($field) => ! $field->isRequired());
     }
 
     public function getResourceRequiredEditFields(Resource $resource): Collection
@@ -282,9 +341,21 @@ class Base
             ->filter(fn ($field) => $field->isRequired());
     }
 
-    public function getResourceCreateFields(Resource $resource): array
+    public function getResourceCreateFormHiddenFields(Resource $resource): Collection
     {
-        return $this->getResourceCreateForm($resource)->getFlatFields(withHidden: true);
+        return collect($this->getResourceCreateForm($resource)->getFlatFields(withHidden: true))
+            ->filter(fn ($field) => $field->isHidden());
+    }
+
+    public function getResourceCreateFormDisabledFields(Resource $resource): Collection
+    {
+        return collect($this->getResourceCreateForm($resource)->getFlatFields(withHidden: true))
+            ->filter(fn ($field) => $field->isDisabled());
+    }
+
+    public function getResourceCreateFormFields(Resource $resource): Collection
+    {
+        return collect($this->getResourceCreateForm($resource)->getFlatFields(withHidden: true));
     }
 
     public function getResourceEditFields(Resource $resource): array
@@ -380,6 +451,19 @@ class Base
     public function hasPage(string $name, Resource $resource): bool
     {
         return $this->getResourcePages($resource)->has($name);
+    }
+
+    public function isSimpleResource(Resource $resource): bool
+    {
+        return $this->hasPage('index', $resource) &&
+            str($this->getResourcePageClass('index', $resource))->before('::')->contains('Manage');
+    }
+
+    public function getResourcePageClass(string $name, Resource $resource): string
+    {
+        return $this->hasPage($name, $resource)
+            ? '\\'.$this->getResourcePages($resource)->get($name)?->getPage().'::class'
+            : '';
     }
 
     public function tableHasPagination(Resource $resource): bool

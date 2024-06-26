@@ -1,3 +1,25 @@
+{{ CURRENTLY_ONLY_SUPPORTING_BASIC_FIELDS_AND_BELONGSTO_RELATIONSHIPS }}
 it({{ DESCRIPTION }}, function () {
-    //
-}){{ RESOLVED_GROUP_METHOD }}->todo();
+    {{ RELATED_MODEL_FACTORIES }}
+
+    $record = {{ MODEL_SINGULAR_NAME }}::factory()
+    {{ RELATIONSHIPS_AS_FOR }}
+    ->make();
+
+    expect({{ MODEL_SINGULAR_NAME }}::count())->toBe(0);
+
+    livewire({{ RESOURCE_CREATE_CLASS}})
+        ->fillForm({{ REQUIRED_FIELDS_WITH_NULL }})
+        ->call('create')
+        ->assertHasFormErrors({{ REQUIRED_FIELDS_WITH_REQUIRED }});
+
+    expect({{ MODEL_SINGULAR_NAME }}::count())->toBe(0);
+
+    livewire({{ RESOURCE_CREATE_CLASS}})
+        ->fillForm({{ REQUIRED_FIELDS_FROM_FACTORY }})
+        ->call('create')
+        ->assertHasNoErrors();
+
+    expect({{ MODEL_SINGULAR_NAME }}::count())->toBe(1);
+
+}){{ RESOLVED_GROUP_METHOD }};

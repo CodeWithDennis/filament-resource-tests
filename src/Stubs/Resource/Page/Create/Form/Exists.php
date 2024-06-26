@@ -15,7 +15,8 @@ class Exists extends Base
     public function getShouldGenerate(): bool
     {
         return $this->getGroupToConfig() &&
-            $this->hasPage('create', $this->resource) &&
+            ! $this->isSimpleResource($this->resource) &&
+//            $this->hasPage('create', $this->resource) &&
             $this->getResourceCreateForm($this->resource)::class == Form::class;
     }
 }

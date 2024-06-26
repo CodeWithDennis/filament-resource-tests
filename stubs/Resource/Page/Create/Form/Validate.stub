@@ -1,3 +1,0 @@
-it({{ DESCRIPTION }}, function () {
-    //
-}){{ RESOLVED_GROUP_METHOD }}->todo();

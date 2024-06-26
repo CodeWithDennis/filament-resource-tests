@@ -7,9 +7,7 @@ use Illuminate\Support\Collection;
 
 class StubHandler
 {
-    public function __construct(public Resource $resource)
-    {
-    }
+    public function __construct(public Resource $resource) {}
 
     public function setResource(Resource $resource): static
     {
@@ -149,7 +147,8 @@ class StubHandler
 
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Create\Form\Exists::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Create\Form\Render::make($resource)->get(),
-            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Create\Form\Validate::make($resource)->get(),
+
+            \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Create\Simple\Form\Create::make($resource)->get(),
 
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\Render::make($resource)->get(),
             \CodeWithDennis\FilamentTests\Stubs\Resource\Page\Edit\HeaderAction\Render::make($resource)->get(),

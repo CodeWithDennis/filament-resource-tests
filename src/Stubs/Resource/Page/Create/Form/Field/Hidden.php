@@ -14,14 +14,14 @@ class Hidden extends Base
     public function getShouldGenerate(): bool
     {
         return $this->getGroupToConfig() &&
-            collect($this->getResourceCreateFields($this->resource))
-                ->filter(fn ($field) => $field->isHidden())->count();
+            $this->hasPage('create', $this->resource) &&
+            $this->getResourceCreateFormHiddenFields($this->resource)->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'CREATE_PAGE_HIDDEN_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields($this->resource))->filter(fn ($field) => $field->isHidden())->keys()),
+            'CREATE_PAGE_HIDDEN_FIELDS' => $this->convertDoubleQuotedArrayString($this->getResourceCreateFormHiddenFields($this->resource)->keys()),
         ];
     }
 }

@@ -15,13 +15,13 @@ class Exists extends Base
     {
         return $this->getGroupToConfig() &&
             $this->hasPage('create', $this->resource) &&
-            collect($this->getResourceCreateFields($this->resource))->count();
+            $this->getResourceCreateFormFields($this->resource)->isNotEmpty();
     }
 
     public function getVariables(): array
     {
         return [
-            'CREATE_PAGE_FIELDS' => $this->convertDoubleQuotedArrayString(collect($this->getResourceCreateFields($this->resource))->keys()),
+            'CREATE_PAGE_FIELDS' => $this->convertDoubleQuotedArrayString($this->getResourceCreateFormFields($this->resource)->keys()),
         ];
     }
 }
